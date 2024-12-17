@@ -26,9 +26,8 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Ограничиваем размер изображения, чтобы карточки выглядели одинаково
             Container(
-              height: 150, // фиксированная высота изображения
+              height: 150, 
               width: double.infinity,
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -47,7 +46,6 @@ class ProductCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            // Ограничиваем описание, чтобы оно не выходило за пределы
             Text(
               description,
               maxLines: 2,
@@ -61,33 +59,26 @@ class ProductCard extends StatelessWidget {
               price,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.green,
+                color: Color(0xFF67BEEA),
               ),
             ),
-            const Spacer(), // Spacer, чтобы иконки были всегда внизу
-            // Иконки внизу
+            const Spacer(), 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Иконка сердца
                 IconButton(
                   icon: const Icon(
                     Icons.favorite_border,
-                    size: 24, // Размер иконки
+                    size: 24, 
                   ),
-                  onPressed: () {
-                    // Добавьте ваш обработчик для иконки сердца
-                  },
+                  onPressed: () {},
                 ),
-                // Иконка корзины
                 IconButton(
                   icon: const Icon(
                     Icons.shopping_cart_outlined,
-                    size: 24, // Размер иконки
+                    size: 24, 
                   ),
-                  onPressed: () {
-                    // Добавьте ваш обработчик для иконки корзины
-                  },
+                  onPressed: () {},
                 ),
               ],
             ),
