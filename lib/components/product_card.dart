@@ -26,14 +26,18 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (imageUrl.isNotEmpty)
-              Expanded(
-                child: Image.network(
-                  imageUrl,
+            // Ограничиваем размер изображения, чтобы карточки выглядели одинаково
+            Container(
+              height: 150, // фиксированная высота изображения
+              width: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(imageUrl),
                   fit: BoxFit.cover,
-                  width: double.infinity,
                 ),
+                borderRadius: BorderRadius.circular(10),
               ),
+            ),
             const SizedBox(height: 8),
             Text(
               name,
@@ -43,6 +47,7 @@ class ProductCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
+            // Ограничиваем описание, чтобы оно не выходило за пределы
             Text(
               description,
               maxLines: 2,
@@ -58,6 +63,33 @@ class ProductCard extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: Colors.green,
               ),
+            ),
+            const Spacer(), // Spacer, чтобы иконки были всегда внизу
+            // Иконки внизу
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Иконка сердца
+                IconButton(
+                  icon: const Icon(
+                    Icons.favorite_border,
+                    size: 24, // Размер иконки
+                  ),
+                  onPressed: () {
+                    // Добавьте ваш обработчик для иконки сердца
+                  },
+                ),
+                // Иконка корзины
+                IconButton(
+                  icon: const Icon(
+                    Icons.shopping_cart_outlined,
+                    size: 24, // Размер иконки
+                  ),
+                  onPressed: () {
+                    // Добавьте ваш обработчик для иконки корзины
+                  },
+                ),
+              ],
             ),
           ],
         ),
