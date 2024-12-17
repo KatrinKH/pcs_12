@@ -20,6 +20,8 @@ class _HomePageState extends State<HomePage> {
 
   String _sortCriteria = 'Сбросить'; 
   List<Map<String, dynamic>>? _originalNotes; 
+  double? _minPrice; // Минимальная цена для фильтра
+  double? _maxPrice; // Максимальная цена для фильтра
 
   void addNewNote() {
     showDialog(
@@ -53,10 +55,106 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Map<String, dynamic>> _filterNotes(List<Map<String, dynamic>> notes) {
-    if (_searchQuery.isEmpty) {
-      return notes;
+    var filteredNotes = notes;
+
+    // Фильтрация по цене
+    if (_minPrice != null) {
+      filteredNotes = filteredNotes.where((note) => (note['Price'] ?? double.infinity) >= _minPrice!).toList();
     }
-    return notes.where((note) => note['Name'].toString().toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+    if (_maxPrice != null) {
+      filteredNotes = filteredNotes.where((note) => (note['Price'] ?? 0) <= _maxPrice!).toList();
+    }
+
+    // Фильтрация по поисковому запросу
+    if (_searchQuery.isNotEmpty) {
+      filteredNotes = filteredNotes.where((note) => note['Name'].toString().toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+    }
+
+    return filteredNotes;
+  }
+
+  void _showSortAndFilterDialog() {
+    TextEditingController minPriceController = TextEditingController();
+    TextEditingController maxPriceController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Сортировка и фильтр'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Сортировать по:'),
+              ListTile(
+                title: const Text('Дешевле'),
+                onTap: () {
+                  setState(() {
+                    _sortCriteria = 'Дешевле';
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Дороже'),
+                onTap: () {
+                  setState(() {
+                    _sortCriteria = 'Дороже';
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('По алфавиту'),
+                onTap: () {
+                  setState(() {
+                    _sortCriteria = 'По алфавиту';
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Сбросить сортировку'),
+                onTap: () {
+                  setState(() {
+                    _sortCriteria = 'Сбросить';
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              const SizedBox(height: 20),
+              const Text('Фильтр по цене:'),
+              TextField(
+                controller: minPriceController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Минимальная цена',
+                ),
+              ),
+              TextField(
+                controller: maxPriceController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Максимальная цена',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _minPrice = double.tryParse(minPriceController.text);
+                  _maxPrice = double.tryParse(maxPriceController.text);
+                });
+                Navigator.pop(context);
+              },
+              child: const Text('Применить'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -65,57 +163,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.sort),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('Выберите критерий сортировки'),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        title: const Text('Дешевле'),
-                        onTap: () {
-                          setState(() {
-                            _sortCriteria = 'Дешевле';
-                          });
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        title: const Text('Дороже'),
-                        onTap: () {
-                          setState(() {
-                            _sortCriteria = 'Дороже';
-                          });
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        title: const Text('По алфавиту'),
-                        onTap: () {
-                          setState(() {
-                            _sortCriteria = 'По алфавиту';
-                          });
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        title: const Text('Сбросить'),
-                        onTap: () {
-                          setState(() {
-                            _sortCriteria = 'Сбросить';
-                          });
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          },
+          onPressed: _showSortAndFilterDialog, // Открытие диалога сортировки и фильтрации
         ),
         title: _isSearching
             ? TextField(
@@ -130,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                   });
                 },
               )
-            : const Text('Видеоигры'), // Corrected this line
+            : const Text('Видеоигры'),
         centerTitle: true,
         actions: [
           IconButton(
