@@ -79,7 +79,6 @@ class CheckoutPage extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Логика для завершения заказа
                   final order = Order(
                     totalQuantity: totalQuantity,
                     totalPrice: totalPrice,
@@ -97,7 +96,6 @@ class CheckoutPage extends StatelessWidget {
                     ),
                   );
 
-                  // Вернуться на главную страницу
                   Navigator.of(context).popUntil((route) => route.isFirst);
                 },
                 style: ElevatedButton.styleFrom(

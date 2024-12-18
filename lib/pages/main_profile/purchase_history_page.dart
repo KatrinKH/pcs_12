@@ -9,7 +9,7 @@ class PurchaseHistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final OrderService orderService = OrderService();
-    final List<Order> orders = orderService.orders; // Получаем список заказов
+    final List<Order> orders = orderService.orders; 
 
     return Scaffold(
       appBar: AppBar(

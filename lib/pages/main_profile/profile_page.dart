@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pcs_12/auth/auth_service.dart';
 import 'package:pcs_12/pages/main_profile/login_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; 
-import 'package:pcs_12/pages/main_profile/purchase_history_page.dart'; // Импорт новой страницы
+import 'package:pcs_12/pages/main_profile/purchase_history_page.dart'; 
 import 'package:pcs_12/pages/main_home/shopping cart/order_service.dart';
 
 class UserData {
@@ -37,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final authService = AuthServices();
   final UserData _userData = UserData();
   final SupabaseClient _supabase = Supabase.instance.client; 
-  final OrderService _orderService = OrderService(); // Сервис заказов
+  final OrderService _orderService = OrderService(); 
 
   Future<void> _fetchUserEmail() async {
     final user = _supabase.auth.currentUser;
