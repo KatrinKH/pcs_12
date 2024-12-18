@@ -3,7 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:pcs_12/components/product_card.dart';
 import 'package:pcs_12/widgets/add_product_dialog.dart';
 import 'package:pcs_12/pages/main_home/product_detail_page.dart';
-import 'package:pcs_12/pages/main_home/shopping_page.dart'; 
+import 'package:pcs_12/pages/main_home/shopping%20cart/shopping_page.dart'; 
 import 'package:pcs_12/pages/main_home/sort_abd_filter/product_service.dart';
 import 'package:pcs_12/pages/main_home/sort_abd_filter/sort_filter_dialog.dart';
 

@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:pcs_12/pages/main_home/shopping cart/checkout_page.dart';
 
 class CartPage extends StatelessWidget {
   final List<Map<String, dynamic>> cartItems;
-  final Function(int) onRemoveItem; 
+  final Function(int) onRemoveItem;
 
   const CartPage({super.key, required this.cartItems, required this.onRemoveItem});
 
   @override
   Widget build(BuildContext context) {
+    int totalQuantity = cartItems.length;
+    double totalPrice = 0.0;
+
+    for (var item in cartItems) {
+      totalPrice += item['Price'] ?? 0.0;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Корзина'),
@@ -31,7 +39,7 @@ class CartPage extends StatelessWidget {
                     children: [
                       SlidableAction(
                         onPressed: (BuildContext context) {
-                          _showConfirmationDialog(context, index); 
+                          _showConfirmationDialog(context, index);
                         },
                         backgroundColor: Colors.red,
                         foregroundColor: Colors.white,
@@ -67,6 +75,37 @@ class CartPage extends StatelessWidget {
                 );
               },
             ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => CheckoutPage(
+                  totalQuantity: totalQuantity,
+                  totalPrice: totalPrice,
+                ),
+              ),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            backgroundColor: const Color(0xFF67BEEA),
+          ),
+          child: Text(
+            'К оформлению: $totalQuantity игры, \Р${totalPrice.toStringAsFixed(2)}',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
     );
   }
 
@@ -80,18 +119,18 @@ class CartPage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
               },
               child: const Text('Отмена'),
             ),
             TextButton(
               onPressed: () {
                 if (index >= 0 && index < cartItems.length) {
-                  onRemoveItem(index); 
+                  onRemoveItem(index);
                 } else {
                   print('Ошибка: некорректный индекс $index');
                 }
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
               },
               child: const Text('Да'),
             ),
