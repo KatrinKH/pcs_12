@@ -42,6 +42,12 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _removeFromCart(int index) {
+    setState(() {
+      _cartItems.removeAt(index); // Удаляем товар по индексу
+    });
+  }
+
   void _showSortAndFilterDialog() {
     showDialog(
       context: context,
@@ -106,6 +112,7 @@ class _HomePageState extends State<HomePage> {
                 MaterialPageRoute(
                   builder: (context) => CartPage(
                     cartItems: _cartItems, // Передача корзины корректно
+                    onRemoveItem: _removeFromCart,  // Передаем функцию удаления
                   ),
                 ),
               );
