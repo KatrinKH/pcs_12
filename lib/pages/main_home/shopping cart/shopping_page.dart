@@ -75,37 +75,39 @@ class CartPage extends StatelessWidget {
                 );
               },
             ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => CheckoutPage(
-                  totalQuantity: totalQuantity,
-                  totalPrice: totalPrice,
+      bottomNavigationBar: cartItems.isEmpty
+          ? null // скрываем кнопку, если корзина пуста
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CheckoutPage(
+                        totalQuantity: totalQuantity,
+                        totalPrice: totalPrice,
+                      ),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  backgroundColor: const Color(0xFF67BEEA),
+                ),
+                child: Text(
+                  'К оформлению: $totalQuantity игры, \Р${totalPrice.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
             ),
-            backgroundColor: const Color(0xFF67BEEA),
-          ),
-          child: Text(
-            'К оформлению: $totalQuantity игры, \Р${totalPrice.toStringAsFixed(2)}',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
     );
   }
 

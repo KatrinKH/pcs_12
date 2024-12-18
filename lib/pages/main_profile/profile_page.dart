@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pcs_12/auth/auth_service.dart';
 import 'package:pcs_12/pages/main_profile/login_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; 
+import 'package:pcs_12/pages/main_profile/purchase_history_page.dart'; // Импорт новой страницы
+import 'package:pcs_12/pages/main_home/shopping cart/order_service.dart';
 
 class UserData {
   static final UserData _instance = UserData._internal();
@@ -35,6 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final authService = AuthServices();
   final UserData _userData = UserData();
   final SupabaseClient _supabase = Supabase.instance.client; 
+  final OrderService _orderService = OrderService(); // Сервис заказов
 
   Future<void> _fetchUserEmail() async {
     final user = _supabase.auth.currentUser;
@@ -197,6 +200,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 onPressed: _editProfile,
                 child: const Text('Редактировать'),
               ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PurchaseHistoryPage()),
+                  );
+                },
+                child: const Text('История покупок'),
+              ),
+              const SizedBox(height: 20),
+              // Text('Количество заказов: ${_orderService.orders.length}', style: const TextStyle(fontSize: 16)),
             ],
           ),
         ),

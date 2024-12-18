@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pcs_12/pages/main_home/shopping cart/order_service.dart';
+import 'package:pcs_12/model/order_model.dart';
 
 class CheckoutPage extends StatelessWidget {
   final int totalQuantity;
@@ -12,6 +14,11 @@ class CheckoutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final OrderService orderService = OrderService();
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController addressController = TextEditingController();
+    final TextEditingController phoneController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Оформление заказа'),
@@ -45,22 +52,25 @@ class CheckoutPage extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 16),
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
                 labelText: 'Имя',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: addressController,
+              decoration: const InputDecoration(
                 labelText: 'Адрес доставки',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: phoneController,
+              decoration: const InputDecoration(
                 labelText: 'Контактный телефон',
                 border: OutlineInputBorder(),
               ),
@@ -70,11 +80,25 @@ class CheckoutPage extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Логика для завершения заказа
+                  final order = Order(
+                    totalQuantity: totalQuantity,
+                    totalPrice: totalPrice,
+                    orderDate: DateTime.now(),
+                    name: nameController.text,
+                    address: addressController.text,
+                    phone: phoneController.text,
+                  );
+
+                  orderService.addOrder(order);
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Заказ успешно оформлен!'),
                     ),
                   );
+
+                  // Вернуться на главную страницу
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
