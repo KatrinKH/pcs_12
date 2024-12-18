@@ -32,9 +32,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void addToCart(Map<String, dynamic> product) {
+  void _updateCartStatus(Map<String, dynamic> product, bool isInCart) {
     setState(() {
-      _cartItems.add(product);
+      if (isInCart) {
+        _cartItems.add(product); // Добавляем товар в корзину
+      } else {
+        _cartItems.removeWhere((item) => item['id'] == product['id']); // Удаляем товар из корзины
+      }
     });
   }
 
@@ -100,7 +104,9 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CartPage(cartItems: _cartItems), 
+                  builder: (context) => CartPage(
+                    cartItems: _cartItems, // Передача корзины корректно
+                  ),
                 ),
               );
             },
@@ -159,6 +165,9 @@ class _HomePageState extends State<HomePage> {
                   imageUrl: imageUrl,
                   description: description,
                   price: price,
+                  onCartStatusChanged: (isInCart) {
+                    _updateCartStatus(note, isInCart); // Обновление корзины
+                  },
                 ),
               );
             },

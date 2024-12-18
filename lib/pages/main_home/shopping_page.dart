@@ -24,11 +24,11 @@ class CartPage extends StatelessWidget {
                 final description = item['Description'] ?? 'Нет описания';
                 final price = item['Price'] != null ? '\Р${item['Price']}' : 'Цена не указана';
 
-                return ProductCard(
-                  name: name,
-                  imageUrl: imageUrl,
-                  description: description,
-                  price: price,
+                return ListTile(
+                  leading: Image.network(imageUrl),
+                  title: Text(name),
+                  subtitle: Text(description),
+                  trailing: Text(price),
                 );
               },
             ),
