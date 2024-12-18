@@ -35,16 +35,20 @@ class _HomePageState extends State<HomePage> {
   void _updateCartStatus(Map<String, dynamic> product, bool isInCart) {
     setState(() {
       if (isInCart) {
-        _cartItems.add(product); // Добавляем товар в корзину
+        _cartItems.add(product); 
       } else {
-        _cartItems.removeWhere((item) => item['id'] == product['id']); // Удаляем товар из корзины
+        _cartItems.removeWhere((item) => item['id'] == product['id']); 
       }
     });
   }
 
   void _removeFromCart(int index) {
     setState(() {
-      _cartItems.removeAt(index); // Удаляем товар по индексу
+      if (index >= 0 && index < _cartItems.length) {
+        _cartItems.removeAt(index); 
+      } else {
+        print('Ошибка: некорректный индекс $index для удаления');
+      }
     });
   }
 
@@ -111,11 +115,13 @@ class _HomePageState extends State<HomePage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => CartPage(
-                    cartItems: _cartItems, // Передача корзины корректно
-                    onRemoveItem: _removeFromCart,  // Передаем функцию удаления
+                    cartItems: _cartItems,
+                    onRemoveItem: _removeFromCart, 
                   ),
                 ),
-              );
+              ).then((_) {
+                setState(() {}); 
+              });
             },
           ),
         ],
@@ -173,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                   description: description,
                   price: price,
                   onCartStatusChanged: (isInCart) {
-                    _updateCartStatus(note, isInCart); // Обновление корзины
+                    _updateCartStatus(note, isInCart);
                   },
                 ),
               );
